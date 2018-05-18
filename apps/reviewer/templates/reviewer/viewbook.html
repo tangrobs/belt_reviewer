@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        .reviews{
+            width:500px;
+            display: inline-block;
+        }
+        .add_review{
+            width:300px;
+            display: inline-block;
+            margin-left:30px;
+            vertical-align: top;
+        }
+    </style>
+
+</head>
+<body>
+    <div class = "header">
+        <a href = "/books">Home</a>
+        <a href = "/logout">Logout</a>
+    </div>
+    {% if messages %}
+        {% for message in messages %}
+            <p {% if message.tags %} class = "{{message.tags}}"{%endif%}>{{message}}</p>
+        {% endfor %}
+    {% endif %}
+    <h1>{{book.title}}</h1>
+    <p>Author: {{author}}</p>
+    <br>
+    <div class = "reviews">
+        <h2>reviews:</h2>
+        <hr>
+        {% for e in reviews %}
+        <p>rating: {{e.rating}} stars</p>
+        <p><a href = "/users/{{e.reviewer.id}}">{{e.reviewer.alias}}</a> says: {{e.content}}</p>
+        <p>{{e.created_at}} 
+            <span>
+            {% if e.reviewer.id == request.session.user_id %}
+                <a href = "/deletereview/{{e.id}}">Delete this review</a> 
+            {% endif %}
+            </span>
+        </p>
+        <hr>
+        {% endfor %}
+    </div>
+    <div class = "add_review">
+        <form action = "/addreview" method = "post">
+            {% csrf_token %}
+            <h3>Add a Review:</h3>
+            <input type = "hidden" name = "bookid" value = "{{book.id}}">
+            <textarea name = review></textarea>
+            <p>Rating: <select name = "rating">
+                <option value = "1">1</option>
+                <option value = "2">2</option>
+                <option value = "3">3</option>
+                <option value = "4">4</option>
+                <option value = "5">5</option>
+            </select></p>
+            <input type = "submit" name = "submit review">
+        </form>
+    </div>
+    
+</body>
+</html>

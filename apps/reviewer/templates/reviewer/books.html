@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Page Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        .recent_books{
+            vertical-align: top;
+            display:inline-block;
+            width:500px;
+            border:2px solid black;
+        }
+        .other_books{
+            display:inline-block;
+            width:300px;
+            height:300px;
+            vertical-align:top;
+        }
+        .books{
+
+            border:2px solid black;
+            overflow:scroll;
+        }
+    </style>
+
+</head>
+<body>
+    <div class = "header">
+        <h1>Welcome, {{request.session.alias}}!</h1>
+        <a href = "/books/add">Add Book and Review</a>
+        <a href = "/logout">Logout</a>
+    </div>
+    {% if messages %}
+        {% for message in messages %}
+            <p {% if message.tags %} class = "{{message.tags}}"{%endif%}>{{message}}</p>
+        {% endfor %}
+    {% endif %}
+    <div class = "recent_books">
+        {% for review in reviews %}
+        <p><a href ="/books/{{review.book.id}}">{{review.book.title}}</a></p>
+        <div class = "review">
+            <p>Rating: {{review.rating}} stars</p>
+            <p><a href = "/users/{{review.reviewer.id}}">{{review.reviewer.alias}}</a> says: {{review.content}}</p>
+            <p>posted on nov 25, 2014</p>
+        </div>
+        <br>
+        <br>
+        {% endfor %}
+    </div>
+    <div class ="other_books">
+        <h4>Other books with Reviews:</h4>
+        <div class = "books">
+            {% for book in books %}
+                <p><a href="/books/{{book.id}}">{{book.title}}</a></p>         
+            {% endfor %}
+        </div>
+    </div>
+    
+</body>
+</html>
